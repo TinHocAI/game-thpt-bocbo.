@@ -3408,8 +3408,11 @@
       <button type="button" id="btn-hud-garage"
         style="padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.6); background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">🚗
         Gara Xe</button>
+      <button type="button" id="btn-hud-friends" title="Danh sách bạn bè & Kết bạn"
+        style="padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.55); background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">👥
+        Bạn bè <span id="hud-friends-count" style="background:rgba(15,23,42,0.55); padding:1px 5px; border-radius:999px; font-size:10px;">0</span></button>
       <button type="button" id="btn-hud-logout" title="Đăng xuất tài khoản"
-        style="padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(248, 113, 113, 0.55); background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">🚪
+        style="grid-column: 1 / -1; padding: 6px 8px; border-radius: 8px; border: 1px solid rgba(248, 113, 113, 0.55); background: linear-gradient(135deg, #ef4444, #b91c1c); color: #fff; font-size: 11.5px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 4px;">🚪
         Đăng xuất</button>
     </div>
 
@@ -3517,9 +3520,14 @@
       <button type="button" class="cim-action-btn" data-act="highfive" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(250,204,21,0.4); background:rgba(217,119,6,0.25); color:#fef08a; font-size:12px; font-weight:800; cursor:pointer;">👏 Đập tay High-Five</button>
       <button type="button" class="cim-action-btn" data-act="chat" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(74,222,128,0.4); background:rgba(22,163,74,0.25); color:#dcfce7; font-size:12px; font-weight:800; cursor:pointer;">💬 Trò chuyện / Hỏi bài</button>
       <button type="button" class="cim-action-btn" data-act="duel" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(168,85,247,0.45); background:rgba(124,58,237,0.3); color:#f3e8ff; font-size:12px; font-weight:800; cursor:pointer;">⚔️ Đố vui (+10 Xu)</button>
+      <button type="button" class="cim-action-btn" data-act="dance" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(251,146,60,0.45); background:rgba(234,88,12,0.25); color:#ffedd5; font-size:12px; font-weight:800; cursor:pointer;">💃 Nhảy múa cùng nhau</button>
+      <button type="button" class="cim-action-btn" data-act="heart" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(244,63,94,0.45); background:rgba(225,29,72,0.25); color:#ffe4e6; font-size:12px; font-weight:800; cursor:pointer;">🫶 Thả tim / Cổ vũ</button>
+      <button type="button" class="cim-action-btn" data-act="selfie" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(45,212,191,0.45); background:rgba(13,148,136,0.25); color:#ccfbf1; font-size:12px; font-weight:800; cursor:pointer;">📸 Chụp ảnh kỷ niệm</button>
+      <button type="button" class="cim-action-btn" id="btn-cim-addfriend" data-act="addfriend" style="padding:8px 10px; border-radius:10px; border:1px solid rgba(96,165,250,0.5); background:rgba(37,99,235,0.3); color:#dbeafe; font-size:12px; font-weight:800; cursor:pointer;">🤝 Kết bạn</button>
       <button type="button" class="cim-action-btn" data-act="gift" style="grid-column:1 / -1; padding:8px 10px; border-radius:10px; border:1px solid rgba(244,114,182,0.45); background:rgba(219,39,119,0.22); color:#fce7f3; font-size:12px; font-weight:800; cursor:pointer;">🎁 Tặng 2 Xu kết bạn (+6 Năng động)</button>
     </div>
   </div>
+  <div id="selfie-flash-overlay" style="display:none; position:fixed; inset:0; z-index:9999; background:#ffffff; opacity:0; pointer-events:none; transition:opacity 0.25s ease;"></div>
 
   <!-- Modal Đố Vui Nhanh Khi Tương Tác Bạn Bè -->
   <div class="modal-overlay" id="char-duel-modal" style="z-index:75;">
@@ -3530,6 +3538,22 @@
       <div id="duel-options-box" style="display:flex; flex-direction:column; gap:8px;"></div>
       <div class="modal-actions" style="margin-top:12px;">
         <button type="button" id="btn-close-duel" class="btn-secondary">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Danh Sách Bạn Bè & Kết Bạn -->
+  <div class="modal-overlay" id="friends-modal" style="z-index: 76;">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-title" style="color:#38bdf8;">👥 DANH SÁCH BẠN BÈ & KẾT BẠN</div>
+      <div class="modal-subtitle">Kết bạn với người chơi Online hoặc bạn học trong sân trường THPT Bộc Bố!</div>
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button type="button" id="tab-friends-mine" style="flex:1; padding:9px; border-radius:10px; border:1px solid rgba(56,189,248,0.6); background:rgba(2,132,199,0.35); color:#fff; font-weight:800; font-size:12.5px; cursor:pointer;">❤️ Bạn bè của tôi (<span id="tab-friends-count">0</span>)</button>
+        <button type="button" id="tab-friends-discover" style="flex:1; padding:9px; border-radius:10px; border:1px solid rgba(148,163,184,0.3); background:rgba(30,41,59,0.75); color:#cbd5e1; font-weight:800; font-size:12.5px; cursor:pointer;">🌐 Online & Bạn học</button>
+      </div>
+      <div id="friends-list-container" style="max-height:320px; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px;"></div>
+      <div class="modal-actions" style="margin-top:14px;">
+        <button type="button" id="btn-close-friends" class="btn-secondary">Đóng</button>
       </div>
     </div>
   </div>
@@ -8533,6 +8557,12 @@
       } catch (e) { }
     }
 
+    let friendsList = [];
+    try {
+      friendsList = JSON.parse(localStorage.getItem('bocbo_friends_list') || '[]');
+      if (!Array.isArray(friendsList)) friendsList = [];
+    } catch (e) { friendsList = []; }
+
     function pushAccountProgressToServer() {
       if (!currentAccountUsername || !isAuthServerOnline) return;
       const payload = {
@@ -8545,6 +8575,7 @@
         activeVehicleId: activeVehicleId,
         ownedAccessories: ownedAccessories.slice(),
         equippedAccessories: equippedAccessories.slice(),
+        friends: friendsList.slice(),
         profile: { ...myPlayer.data }
       };
       fetch(AUTH_API_BASE + '/api/save', {
@@ -8561,6 +8592,7 @@
         localStorage.setItem('bocbo_active_vehicle', activeVehicleId);
         localStorage.setItem('bocbo_owned_accessories', JSON.stringify(ownedAccessories));
         localStorage.setItem('bocbo_equipped_accessories', JSON.stringify(equippedAccessories));
+        localStorage.setItem('bocbo_friends_list', JSON.stringify(friendsList));
 
         if (currentAccountUsername) {
           const db = loadAccountsDB();
@@ -8573,6 +8605,7 @@
           acc.activeVehicleId = activeVehicleId;
           acc.ownedAccessories = ownedAccessories.slice();
           acc.equippedAccessories = equippedAccessories.slice();
+          acc.friends = friendsList.slice();
           acc.profile = { ...myPlayer.data };
           acc.lastSaved = Date.now();
           db[currentAccountUsername] = acc;
@@ -8620,6 +8653,8 @@
       activeVehicleId = acc.activeVehicleId && ownedVehicles.includes(acc.activeVehicleId) ? acc.activeVehicleId : 'walk';
       ownedAccessories = Array.isArray(acc.ownedAccessories) ? acc.ownedAccessories.slice() : [];
       equippedAccessories = Array.isArray(acc.equippedAccessories) ? acc.equippedAccessories.filter(id => ownedAccessories.includes(id)) : [];
+      friendsList = Array.isArray(acc.friends) ? acc.friends.slice() : [];
+      try { localStorage.setItem('bocbo_friends_list', JSON.stringify(friendsList)); } catch (e) {}
 
       if (acc.profile) {
         Object.assign(myPlayer.data, acc.profile);
@@ -8636,6 +8671,7 @@
       if (typeof rebuildMyPlayerMesh === 'function') rebuildMyPlayerMesh();
       if (typeof applyVehicleBonuses === 'function') applyVehicleBonuses();
       if (typeof updateHUDStats === 'function') updateHUDStats();
+      if (typeof updateFriendsCountBadge === 'function') updateFriendsCountBadge();
       if (typeof renderAllVehicleShops === 'function') renderAllVehicleShops();
       return true;
     }
@@ -9574,9 +9610,40 @@
       isSeatedOnCampus = true;
       activeCampusBench = bench;
 
-      // Đặt vị trí nhân vật ngồi sát mặt ghế đá
-      myPlayer.pos.set(bench.x, -0.14, bench.z);
-      myPlayer.rotY = bench.rotY || 0;
+      // Ghế đá rộng ~2.1m: chia 3 chỗ ngồi cạnh nhau theo chiều ngang ghế đá
+      const rotY = bench.rotY || 0;
+      const rightX = Math.cos(rotY);
+      const rightZ = -Math.sin(rotY);
+      const slotOffsets = [-0.62, 0.0, 0.62];
+      const candidates = slotOffsets.map(off => {
+        const sx = bench.x + off * rightX;
+        const sz = bench.z + off * rightZ;
+        let occupied = false;
+        if (typeof otherPlayers === 'object' && otherPlayers) {
+          Object.values(otherPlayers).forEach(op => {
+            if (op && op.mesh) {
+              const d = Math.hypot(op.mesh.position.x - sx, op.mesh.position.z - sz);
+              if (d < 0.45) occupied = true;
+            }
+          });
+        }
+        if (Array.isArray(campusStudents)) {
+          campusStudents.forEach(st => {
+            if (st && st.mesh) {
+              const d = Math.hypot(st.mesh.position.x - sx, st.mesh.position.z - sz);
+              if (d < 0.45) occupied = true;
+            }
+          });
+        }
+        const distMe = Math.hypot(myPlayer.pos.x - sx, myPlayer.pos.z - sz);
+        return { x: sx, z: sz, occupied, distMe };
+      });
+      const freeSlots = candidates.filter(s => !s.occupied).sort((a, b) => a.distMe - b.distMe);
+      const chosenSlot = freeSlots.length > 0 ? freeSlots[0] : candidates.sort((a, b) => a.distMe - b.distMe)[0];
+
+      // Đặt vị trí nhân vật ngồi sát mặt ghế đá tại chỗ trống
+      myPlayer.pos.set(chosenSlot.x, -0.14, chosenSlot.z);
+      myPlayer.rotY = rotY;
       myPlayer.velY = 0;
       myPlayer.isGrounded = true;
 
@@ -9814,11 +9881,17 @@
 
           try {
             voiceAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (voiceAudioCtx.state === 'suspended') {
+              voiceAudioCtx.resume().catch(() => {});
+            }
             const source = voiceAudioCtx.createMediaStreamSource(stream);
             voiceAnalyser = voiceAudioCtx.createAnalyser();
             voiceAnalyser.fftSize = 256;
             source.connect(voiceAnalyser);
             voiceDataArray = new Uint8Array(voiceAnalyser.frequencyBinCount);
+            if (typeof setupServerVoiceRelayCapture === 'function') {
+              setupServerVoiceRelayCapture(voiceAudioCtx, source);
+            }
           } catch (ae) {
             console.warn('Voice analyser setup error:', ae);
           }
@@ -9832,6 +9905,9 @@
           showToast('⚠️ Không thể kích hoạt Mic: ' + (err.name === 'NotAllowedError' ? 'Chưa cấp quyền truy cập Mic' : err.message));
         }
       } else {
+        if (typeof teardownServerVoiceRelayCapture === 'function') {
+          teardownServerVoiceRelayCapture();
+        }
         if (localVoiceStream) {
           localVoiceStream.getTracks().forEach(t => t.stop());
           localVoiceStream = null;
@@ -9924,7 +10000,165 @@
 
       call.on('error', (err) => {
         console.warn('Call error with peer', pid, err);
+        delete peerVoiceCalls[call.peer];
       });
+    }
+
+    // Hệ thống truyền âm thanh dự phòng qua Máy chủ (hoạt động xuyên mạng PC <-> Điện thoại khi P2P bị chặn NAT)
+    let voiceRelayProcessor = null;
+    let voiceRelayZeroGain = null;
+    let voiceRelaySampleBuf = [];
+    let voiceRelayLastSpeechAt = 0;
+    let voicePlaybackCtx = null;
+    const voicePlaybackSchedule = {};
+    const RELAY_SAMPLE_RATE = 11025;
+    const RELAY_CHUNK_SAMPLES = 2756; // ~250ms audio mỗi gói
+
+    function ensureVoicePlaybackCtx() {
+      if (!voicePlaybackCtx) {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (AC) voicePlaybackCtx = new AC();
+      }
+      if (voicePlaybackCtx && voicePlaybackCtx.state === 'suspended') {
+        voicePlaybackCtx.resume().catch(() => {});
+      }
+      return voicePlaybackCtx;
+    }
+
+    ['pointerdown', 'keydown', 'touchstart'].forEach(evtName => {
+      window.addEventListener(evtName, () => {
+        ensureVoicePlaybackCtx();
+        for (const pid in remoteVoiceAudios) {
+          const vd = remoteVoiceAudios[pid];
+          if (vd && vd.audioEl && vd.audioEl.paused) {
+            vd.audioEl.play().catch(() => {});
+          }
+        }
+      }, { passive: true });
+    });
+
+    function teardownServerVoiceRelayCapture() {
+      if (voiceRelayProcessor) {
+        try { voiceRelayProcessor.disconnect(); } catch (e) {}
+        voiceRelayProcessor.onaudioprocess = null;
+        voiceRelayProcessor = null;
+      }
+      if (voiceRelayZeroGain) {
+        try { voiceRelayZeroGain.disconnect(); } catch (e) {}
+        voiceRelayZeroGain = null;
+      }
+      voiceRelaySampleBuf = [];
+    }
+
+    function setupServerVoiceRelayCapture(ctx, sourceNode) {
+      teardownServerVoiceRelayCapture();
+      if (!ctx || !sourceNode || !ctx.createScriptProcessor) return;
+      const inRate = ctx.sampleRate || 48000;
+      const step = Math.max(1, inRate / RELAY_SAMPLE_RATE);
+      voiceRelayProcessor = ctx.createScriptProcessor(2048, 1, 1);
+      voiceRelayZeroGain = ctx.createGain();
+      voiceRelayZeroGain.gain.value = 0;
+
+      voiceRelayProcessor.onaudioprocess = (e) => {
+        if (!isMicActive || !localVoiceStream) return;
+        const input = e.inputBuffer.getChannelData(0);
+        for (let pos = 0; pos < input.length; pos += step) {
+          const s = Math.max(-1, Math.min(1, input[Math.floor(pos)]));
+          voiceRelaySampleBuf.push(s < 0 ? Math.round(s * 32768) : Math.round(s * 32767));
+        }
+
+        while (voiceRelaySampleBuf.length >= RELAY_CHUNK_SAMPLES) {
+          const chunk = voiceRelaySampleBuf.splice(0, RELAY_CHUNK_SAMPLES);
+          let peak = 0;
+          for (let i = 0; i < chunk.length; i++) {
+            const a = Math.abs(chunk[i]);
+            if (a > peak) peak = a;
+          }
+          const now = Date.now();
+          if (peak > 220) {
+            voiceRelayLastSpeechAt = now;
+            if (!isSpeakingLocal) {
+              isSpeakingLocal = true;
+              broadcastNetworkPacket({ type: 'voice_status', id: myPlayerId, isSpeaking: true, isMicActive: true });
+            }
+          }
+          // Chỉ gửi gói âm thanh khi đang nói (hoặc trong 700ms sau khi nói) để tiết kiệm băng thông
+          if (now - voiceRelayLastSpeechAt <= 700) {
+            const int16 = new Int16Array(chunk);
+            const bytes = new Uint8Array(int16.buffer);
+            let bin = '';
+            for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+            const b64 = btoa(bin);
+            broadcastNetworkPacket({
+              type: 'voice_chunk',
+              id: myPlayerId,
+              sr: RELAY_SAMPLE_RATE,
+              pcm: b64
+            });
+          } else if (isSpeakingLocal) {
+            isSpeakingLocal = false;
+            broadcastNetworkPacket({ type: 'voice_status', id: myPlayerId, isSpeaking: false, isMicActive: true });
+          }
+        }
+      };
+
+      sourceNode.connect(voiceRelayProcessor);
+      voiceRelayProcessor.connect(voiceRelayZeroGain);
+      voiceRelayZeroGain.connect(ctx.destination);
+    }
+
+    function handleIncomingVoiceChunk(packet) {
+      if (!packet || !packet.id || packet.id === myPlayerId || !packet.pcm) return;
+      const pid = packet.id;
+      const op = otherPlayers[pid];
+      if (!op || !op.mesh) return;
+
+      op.isSpeaking = true;
+      op.lastVoiceChunkAt = Date.now();
+
+      // Nếu đã nhận được luồng WebRTC P2P trực tiếp đang phát thì bỏ qua gói relay để tránh vọng âm
+      const p2p = remoteVoiceAudios[pid];
+      if (p2p && p2p.audioEl && !p2p.audioEl.paused && p2p.stream && p2p.stream.active) {
+        return;
+      }
+
+      const dist = myPlayer.pos.distanceTo(op.mesh.position);
+      if (dist >= 14.0) return;
+      const vol = dist <= 3.0 ? 1.0 : Math.pow((14.0 - dist) / 11.0, 2);
+      if (vol <= 0.02) return;
+
+      const ctx = ensureVoicePlaybackCtx();
+      if (!ctx || ctx.state === 'suspended') return;
+
+      try {
+        const bin = atob(packet.pcm);
+        const bytes = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        const int16 = new Int16Array(bytes.buffer);
+        if (int16.length === 0) return;
+
+        const sr = packet.sr || RELAY_SAMPLE_RATE;
+        const audioBuf = ctx.createBuffer(1, int16.length, sr);
+        const ch = audioBuf.getChannelData(0);
+        for (let i = 0; i < int16.length; i++) {
+          ch[i] = int16[i] / 32768;
+        }
+
+        const src = ctx.createBufferSource();
+        src.buffer = audioBuf;
+        const gain = ctx.createGain();
+        gain.gain.value = THREE.MathUtils.clamp(vol, 0, 1);
+        src.connect(gain);
+        gain.connect(ctx.destination);
+
+        const nowCtx = ctx.currentTime;
+        let startAt = voicePlaybackSchedule[pid] || nowCtx;
+        if (startAt < nowCtx || startAt - nowCtx > 0.6) {
+          startAt = nowCtx + 0.02;
+        }
+        src.start(startAt);
+        voicePlaybackSchedule[pid] = startAt + audioBuf.duration;
+      } catch (e) { }
     }
 
     function handleIncomingVoiceCall(call) {
@@ -10124,8 +10358,13 @@
       const menu = document.getElementById('char-interact-menu');
       const nameEl = document.getElementById('cim-char-name');
       const roleEl = document.getElementById('cim-char-role');
-      if (nameEl) nameEl.textContent = charObj.name;
-      if (roleEl) roleEl.textContent = `${charObj.className} • Đang đứng gần bạn`;
+      const friendBtn = document.getElementById('btn-cim-addfriend');
+      if (nameEl) nameEl.textContent = charObj.name || 'Bạn học';
+      if (roleEl) roleEl.textContent = `${charObj.className || '10A'} • ${charObj.role === 'peer' ? 'Người chơi Online' : 'Bạn học'} ở gần bạn`;
+      if (friendBtn) {
+        const already = typeof isFriendEntry === 'function' && isFriendEntry(charObj.id, charObj.name);
+        friendBtn.textContent = already ? '✅ Đã là bạn bè' : '🤝 Kết bạn';
+      }
       if (menu) menu.style.display = 'block';
       sound.playClick();
     }
@@ -10145,6 +10384,193 @@
       sound.playClick();
     });
 
+    function isFriendEntry(targetId, targetName) {
+      return friendsList.some(f => (targetId && f.id === targetId) || (targetName && f.name.toLowerCase() === targetName.toLowerCase()));
+    }
+
+    function updateFriendsCountBadge() {
+      const badge = document.getElementById('hud-friends-count');
+      if (badge) badge.textContent = String(friendsList.length);
+      const tabCnt = document.getElementById('tab-friends-count');
+      if (tabCnt) tabCnt.textContent = String(friendsList.length);
+    }
+
+    function toggleFriendEntry(entry) {
+      if (!entry || !entry.name) return false;
+      const idx = friendsList.findIndex(f => (entry.id && f.id === entry.id) || f.name.toLowerCase() === entry.name.toLowerCase());
+      if (idx >= 0) {
+        const removed = friendsList.splice(idx, 1)[0];
+        saveEconomyState();
+        updateFriendsCountBadge();
+        showToast(`Đã hủy kết bạn với ${removed.name}.`);
+        return false;
+      }
+      friendsList.push({
+        id: entry.id || ('fr_' + entry.name.toLowerCase().replace(/\s+/g, '_')),
+        name: entry.name,
+        className: entry.className || '10A',
+        role: entry.role || 'npc',
+        addedAt: Date.now()
+      });
+      myPlayer.dynamicScore = (myPlayer.dynamicScore || 0) + 5;
+      updateHUDStats();
+      saveEconomyState();
+      updateFriendsCountBadge();
+      sound.playBuySuccess();
+      showToast(`🤝 Đã kết bạn với ${entry.name}! (+5 Điểm Năng động)`);
+      return true;
+    }
+
+    let currentFriendsTab = 'mine';
+    function renderFriendsModal() {
+      updateFriendsCountBadge();
+      const box = document.getElementById('friends-list-container');
+      const tabMine = document.getElementById('tab-friends-mine');
+      const tabDisc = document.getElementById('tab-friends-discover');
+      if (tabMine && tabDisc) {
+        tabMine.style.background = currentFriendsTab === 'mine' ? 'rgba(2,132,199,0.45)' : 'rgba(30,41,59,0.75)';
+        tabMine.style.color = currentFriendsTab === 'mine' ? '#fff' : '#cbd5e1';
+        tabDisc.style.background = currentFriendsTab === 'discover' ? 'rgba(2,132,199,0.45)' : 'rgba(30,41,59,0.75)';
+        tabDisc.style.color = currentFriendsTab === 'discover' ? '#fff' : '#cbd5e1';
+      }
+      if (!box) return;
+
+      const onlinePeers = (typeof otherPlayers === 'object' && otherPlayers)
+        ? Object.values(otherPlayers).filter(op => op && op.name)
+        : [];
+
+      if (currentFriendsTab === 'mine') {
+        if (friendsList.length === 0) {
+          box.innerHTML = '<div style="text-align:center; padding:24px; color:#94a3b8; font-size:13px;">Chưa có bạn bè nào. Hãy chuyển sang tab <b>"Online & Bạn học"</b> hoặc lại gần bạn học bấm <b>[E] → Kết bạn</b>!</div>';
+          return;
+        }
+        box.innerHTML = friendsList.map((f, idx) => {
+          const isOnlinePeer = onlinePeers.some(op => ('peer_' + op.id) === f.id || op.name.toLowerCase() === f.name.toLowerCase());
+          const statusBadge = isOnlinePeer
+            ? '<span style="color:#4ade80; font-size:11px; font-weight:800;">🟢 Đang Online</span>'
+            : (f.role === 'peer'
+              ? '<span style="color:#94a3b8; font-size:11px;">⚫ Ngoại tuyến</span>'
+              : '<span style="color:#38bdf8; font-size:11px;">🔵 Bạn học trong trường</span>');
+          return `
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(15,23,42,0.72); border:1px solid rgba(56,189,248,0.28); border-radius:12px; padding:10px 12px;">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:#f8fafc;">${f.name} <span style="font-size:11px; color:#fde047;">(${f.className || '10A'})</span></div>
+                <div>${statusBadge}</div>
+              </div>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <button type="button" class="fr-greet-btn" data-idx="${idx}" style="padding:5px 8px; border-radius:8px; border:1px solid rgba(56,189,248,0.4); background:rgba(2,132,199,0.28); color:#e0f2fe; font-size:11px; font-weight:800; cursor:pointer;">👋 Chào</button>
+                <button type="button" class="fr-gift-btn" data-idx="${idx}" style="padding:5px 8px; border-radius:8px; border:1px solid rgba(244,114,182,0.4); background:rgba(219,39,119,0.25); color:#fce7f3; font-size:11px; font-weight:800; cursor:pointer;">🎁 2 Xu</button>
+                <button type="button" class="fr-remove-btn" data-idx="${idx}" style="padding:5px 8px; border-radius:8px; border:1px solid rgba(248,113,113,0.4); background:rgba(220,38,38,0.25); color:#fecaca; font-size:11px; font-weight:800; cursor:pointer;">✕</button>
+              </div>
+            </div>`;
+        }).join('');
+
+        box.querySelectorAll('.fr-greet-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const f = friendsList[Number(btn.dataset.idx)];
+            if (!f) return;
+            if (typeof showSpeechBubble === 'function') showSpeechBubble(myPlayer.mesh, myPlayer.data.name, `Chào bạn thân ${f.name} nhé! 👋`, true);
+            if (f.role === 'peer' && typeof broadcastNetworkPacket === 'function') {
+              broadcastNetworkPacket({ type: 'interact_emote', targetId: String(f.id || '').replace(/^peer_/, ''), fromName: myPlayer.data.name, act: 'greet', msg: `Chào bạn thân ${f.name} nhé! 👋` });
+            }
+            showToast(`👋 Đã gửi lời chào tới ${f.name}!`);
+            sound.playClick();
+          });
+        });
+        box.querySelectorAll('.fr-gift-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const f = friendsList[Number(btn.dataset.idx)];
+            if (!f) return;
+            if ((myPlayer.coins || 0) < 2) { showToast('❌ Bạn cần ít nhất 2 Xu để tặng bạn!'); return; }
+            myPlayer.coins -= 2;
+            myPlayer.dynamicScore = (myPlayer.dynamicScore || 0) + 6;
+            updateHUDStats();
+            saveEconomyState();
+            if (f.role === 'peer' && typeof broadcastNetworkPacket === 'function') {
+              broadcastNetworkPacket({ type: 'interact_emote', targetId: String(f.id || '').replace(/^peer_/, ''), fromName: myPlayer.data.name, act: 'gift', msg: `Tặng ${f.name} 2 Xu kết bạn! 🎁` });
+            }
+            sound.playBuySuccess();
+            showToast(`🎁 Đã tặng 2 Xu cho ${f.name}! +6 Điểm Năng động!`);
+          });
+        });
+        box.querySelectorAll('.fr-remove-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const f = friendsList[Number(btn.dataset.idx)];
+            if (!f) return;
+            toggleFriendEntry(f);
+            renderFriendsModal();
+          });
+        });
+      } else {
+        const candidates = [];
+        onlinePeers.forEach(op => {
+          candidates.push({ id: 'peer_' + op.id, name: op.name, className: op.className || '10A', role: 'peer', isOnline: true });
+        });
+        if (Array.isArray(campusStudents)) {
+          campusStudents.forEach((st, i) => {
+            if (st && st.name) {
+              candidates.push({ id: st.id || ('npc_' + i), name: st.name, className: st.className || '10A', role: 'npc', isOnline: false });
+            }
+          });
+        }
+        if (candidates.length === 0) {
+          box.innerHTML = '<div style="text-align:center; padding:24px; color:#94a3b8; font-size:13px;">Chưa có người chơi hoặc bạn học nào khác.</div>';
+          return;
+        }
+        box.innerHTML = candidates.map((c, idx) => {
+          const added = isFriendEntry(c.id, c.name);
+          const tag = c.isOnline
+            ? '<span style="color:#4ade80; font-size:11px; font-weight:800;">🟢 Người chơi Online</span>'
+            : '<span style="color:#94a3b8; font-size:11px;">🎓 Bạn học trong trường</span>';
+          return `
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(15,23,42,0.72); border:1px solid rgba(148,163,184,0.22); border-radius:12px; padding:10px 12px;">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:#f8fafc;">${c.name} <span style="font-size:11px; color:#fde047;">(${c.className})</span></div>
+                <div>${tag}</div>
+              </div>
+              <button type="button" class="disc-add-btn" data-idx="${idx}" style="padding:6px 12px; border-radius:9px; border:1px solid ${added ? 'rgba(74,222,128,0.5)' : 'rgba(56,189,248,0.55)'}; background:${added ? 'rgba(22,163,74,0.3)' : 'rgba(2,132,199,0.35)'}; color:#fff; font-size:11.5px; font-weight:800; cursor:pointer;">${added ? '✅ Bạn bè' : '+ Kết bạn'}</button>
+            </div>`;
+        }).join('');
+
+        box.querySelectorAll('.disc-add-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const c = candidates[Number(btn.dataset.idx)];
+            if (!c) return;
+            const added = toggleFriendEntry(c);
+            if (added && c.role === 'peer' && typeof broadcastNetworkPacket === 'function') {
+              broadcastNetworkPacket({ type: 'interact_emote', targetId: c.id.replace(/^peer_/, ''), fromName: myPlayer.data.name, act: 'addfriend', msg: `${myPlayer.data.name} đã kết bạn với bạn! 🤝` });
+            }
+            renderFriendsModal();
+          });
+        });
+      }
+    }
+
+    document.getElementById('btn-hud-friends')?.addEventListener('click', () => {
+      const m = document.getElementById('friends-modal');
+      if (m) {
+        renderFriendsModal();
+        m.style.display = 'flex';
+      }
+      sound.playClick();
+    });
+    document.getElementById('btn-close-friends')?.addEventListener('click', () => {
+      const m = document.getElementById('friends-modal');
+      if (m) m.style.display = 'none';
+      sound.playClick();
+    });
+    document.getElementById('tab-friends-mine')?.addEventListener('click', () => {
+      currentFriendsTab = 'mine';
+      renderFriendsModal();
+      sound.playClick();
+    });
+    document.getElementById('tab-friends-discover')?.addEventListener('click', () => {
+      currentFriendsTab = 'discover';
+      renderFriendsModal();
+      sound.playClick();
+    });
+    updateFriendsCountBadge();
+
     document.querySelectorAll('.cim-action-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         if (!activeInteractChar) return;
@@ -10161,6 +10587,15 @@
         if (c.mesh) c.mesh.rotation.y = Math.atan2(dx, dz);
 
         closeCharInteractMenu();
+
+        if (c.role === 'peer' && typeof broadcastNetworkPacket === 'function' && act !== 'duel') {
+          broadcastNetworkPacket({
+            type: 'interact_emote',
+            targetId: String(c.id || '').replace(/^peer_/, ''),
+            fromName: myPlayer.data.name,
+            act
+          });
+        }
 
         if (act === 'greet') {
           if (typeof showSpeechBubble === 'function') {
@@ -10214,6 +10649,85 @@
             showToast(`💬 Trò chuyện thân thiện cùng ${c.name}! +2 Nề nếp!`);
           }
           sound.playClick();
+        } else if (act === 'dance') {
+          myPlayer.velY = 3.6;
+          myPlayer.isGrounded = false;
+          if (typeof showSpeechBubble === 'function') {
+            showSpeechBubble(myPlayer.mesh, myPlayer.data.name, 'Quẩy hết mình nào! 💃🕺', true);
+            setTimeout(() => showSpeechBubble(c.mesh, c.name, 'Nhạc lên bạn ơi! 🎶✨', false), 280);
+          }
+          for (let k = 0; k < 14; k++) {
+            spawnCutsceneParticle(
+              (myPlayer.pos.x + c.pos.x) / 2 + (Math.random() - 0.5) * 1.1,
+              1.3 + Math.random() * 0.7,
+              (myPlayer.pos.z + c.pos.z) / 2 + (Math.random() - 0.5) * 1.1,
+              [0xf472b6, 0x38bdf8, 0xfacc15, 0x4ade80][k % 4],
+              (Math.random() - 0.5) * 3.0, 2.0 + Math.random() * 1.8, (Math.random() - 0.5) * 3.0, 0.11, 0.75
+            );
+          }
+          if (!charInteractCooldowns[cdKey] || now - charInteractCooldowns[cdKey] > 35000) {
+            charInteractCooldowns[cdKey] = now;
+            myPlayer.dynamicScore = (myPlayer.dynamicScore || 0) + 4;
+            updateHUDStats();
+            saveEconomyState();
+            showToast(`💃 Nhảy múa cực sung cùng ${c.name}! +4 Điểm Năng động!`);
+          } else {
+            showToast(`💃 Đang nhảy múa cùng ${c.name}!`);
+          }
+          sound.playBuySuccess();
+        } else if (act === 'heart') {
+          if (typeof showSpeechBubble === 'function') {
+            showSpeechBubble(myPlayer.mesh, myPlayer.data.name, `Thả tim cho ${c.name} nè! 🫶❤️`, true);
+            setTimeout(() => showSpeechBubble(c.mesh, c.name, 'Cảm ơn cậu nhiều lắm! 💖', false), 300);
+          }
+          for (let k = 0; k < 12; k++) {
+            spawnCutsceneParticle(
+              c.pos.x + (Math.random() - 0.5) * 0.8,
+              1.5 + Math.random() * 0.5,
+              c.pos.z + (Math.random() - 0.5) * 0.8,
+              k % 2 === 0 ? 0xf43f5e : 0xfb7185,
+              (Math.random() - 0.5) * 1.6, 1.8 + Math.random() * 1.2, (Math.random() - 0.5) * 1.6, 0.12, 0.8
+            );
+          }
+          if (!charInteractCooldowns[cdKey] || now - charInteractCooldowns[cdKey] > 35000) {
+            charInteractCooldowns[cdKey] = now;
+            myPlayer.dynamicScore = (myPlayer.dynamicScore || 0) + 3;
+            myPlayer.discipline = Math.min(100, (myPlayer.discipline || 100) + 1);
+            updateHUDStats();
+            saveEconomyState();
+            showToast(`🫶 Đã thả tim cổ vũ ${c.name}! +3 Năng động & +1 Nề nếp!`);
+          } else {
+            showToast(`🫶 Đã thả tim cho ${c.name}!`);
+          }
+          sound.playClick();
+        } else if (act === 'selfie') {
+          const flash = document.getElementById('selfie-flash-overlay');
+          if (flash) {
+            flash.style.display = 'block';
+            flash.style.opacity = '0.88';
+            setTimeout(() => { flash.style.opacity = '0'; }, 90);
+            setTimeout(() => { flash.style.display = 'none'; }, 360);
+          }
+          if (typeof showSpeechBubble === 'function') {
+            showSpeechBubble(myPlayer.mesh, myPlayer.data.name, 'Cười lên nào! 1..2..3 Tách! 📸', true);
+            setTimeout(() => showSpeechBubble(c.mesh, c.name, 'Ảnh đẹp xuất sắc luôn! 😄✌️', false), 300);
+          }
+          if (!charInteractCooldowns[cdKey] || now - charInteractCooldowns[cdKey] > 45000) {
+            charInteractCooldowns[cdKey] = now;
+            myPlayer.dynamicScore = (myPlayer.dynamicScore || 0) + 5;
+            updateHUDStats();
+            saveEconomyState();
+            showToast(`📸 Đã chụp ảnh kỷ niệm cùng ${c.name}! +5 Điểm Năng động!`);
+          } else {
+            showToast(`📸 Đã chụp ảnh kỷ niệm cùng ${c.name}!`);
+          }
+          sound.playBuySuccess();
+        } else if (act === 'addfriend') {
+          const added = toggleFriendEntry({ id: c.id, name: c.name, className: c.className, role: c.role || 'npc' });
+          if (added && typeof showSpeechBubble === 'function') {
+            showSpeechBubble(myPlayer.mesh, myPlayer.data.name, `Làm bạn thân nha ${c.name}! 🤝`, true);
+            setTimeout(() => showSpeechBubble(c.mesh, c.name, 'Nhất trí luôn bạn ơi! 😊🤝', false), 300);
+          }
         } else if (act === 'gift') {
           if ((myPlayer.coins || 0) < 2) {
             showToast('❌ Bạn cần ít nhất 2 Xu để tặng bạn!');
@@ -11431,6 +11945,31 @@
       } else if (packet.type === 'shared_file') {
         if (typeof receiveRemoteSharedFile === 'function' && packet.fileInfo) {
           receiveRemoteSharedFile(packet.fileInfo);
+        }
+      } else if (packet.type === 'interact_emote') {
+        const sender = otherPlayers[packet.id];
+        const fromName = packet.fromName || (sender && sender.name) || 'Bạn học';
+        const actTextMap = {
+          greet: '👋 Vẫy tay chào bạn!',
+          highfive: '👏 Đập tay High-Five!',
+          chat: '💬 Muốn trò chuyện cùng bạn!',
+          dance: '💃 Đang nhảy múa cùng bạn!',
+          heart: '🫶 Thả tim cổ vũ bạn!',
+          selfie: '📸 Chụp ảnh kỷ niệm cùng bạn!',
+          addfriend: '🤝 Đã thêm bạn vào danh sách bạn bè!',
+          gift: '🎁 Tặng bạn lời chúc & 2 Xu kết bạn!'
+        };
+        const msgText = packet.msg || actTextMap[packet.act] || '✨ Tương tác cùng bạn!';
+        if (sender && sender.mesh && typeof showSpeechBubble === 'function') {
+          showSpeechBubble(sender.mesh, fromName, msgText, false);
+        }
+        if (packet.targetId === myPeerId) {
+          showToast(`${fromName}: ${msgText}`);
+          if (typeof sound !== 'undefined') sound.playClick();
+        }
+      } else if (packet.type === 'voice_chunk') {
+        if (typeof handleIncomingVoiceChunk === 'function') {
+          handleIncomingVoiceChunk(packet);
         }
       } else if (packet.type === 'classroom_board_sync') {
         if (typeof applyRemoteClassroomBoardSync === 'function') {
@@ -16850,6 +17389,13 @@
         }
         if (voiceData && voiceData.audioEl) {
           voiceData.audioEl.volume = THREE.MathUtils.clamp(vol, 0, 1);
+          if (vol > 0.02 && voiceData.audioEl.paused) {
+            voiceData.audioEl.play().catch(() => {});
+          }
+        }
+        if (op.lastVoiceChunkAt && Date.now() - op.lastVoiceChunkAt > 900) {
+          op.isSpeaking = false;
+          op.lastVoiceChunkAt = 0;
         }
         if (op.mesh && op.mesh.userData && op.mesh.userData.labelEl) {
           const badge = op.mesh.userData.labelEl.querySelector('.voice-proximity-badge');

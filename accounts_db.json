@@ -1,1 +1,35 @@
-{}
+{
+  "testuser_1794757481724": {
+    "salt": "bcb68d9ad0ee82e44d224dc00a750e44",
+    "passwordHash": "5e3ea5a6a338a9ec7d9c60292a8f49c36310b8aeb688118522b04efbb00e1f7d358a6b58e33487bf28cc83a58b91c8aa5eeea8305889b87e96ae06bbec26741c",
+    "coins": 20,
+    "dynamicScore": 0,
+    "discipline": 100,
+    "energy": 100,
+    "ownedVehicles": [
+      "walk"
+    ],
+    "activeVehicleId": "walk",
+    "ownedAccessories": [],
+    "equippedAccessories": [],
+    "friends": [
+      {
+        "id": "peer_p2",
+        "name": "Ban B",
+        "className": "11A",
+        "role": "peer"
+      }
+    ],
+    "profile": {
+      "name": "Test User",
+      "className": "11A",
+      "gender": "male",
+      "hairStyle": "short",
+      "hairColor": "black",
+      "outfit": "classic",
+      "glasses": true
+    },
+    "createdAt": 1794757481776,
+    "lastSaved": 1794757481783
+  }
+}

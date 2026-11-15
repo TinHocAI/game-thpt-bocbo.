@@ -107,6 +107,7 @@ function sanitizeAccountForClient(username, acc) {
     activeVehicleId: acc.activeVehicleId || 'walk',
     ownedAccessories: Array.isArray(acc.ownedAccessories) ? acc.ownedAccessories : [],
     equippedAccessories: Array.isArray(acc.equippedAccessories) ? acc.equippedAccessories : [],
+    friends: Array.isArray(acc.friends) ? acc.friends : [],
     profile: acc.profile || { name: username, className: '10A' }
   };
 }
@@ -196,6 +197,7 @@ const server = http.createServer(async (req, res) => {
         activeVehicleId: 'walk',
         ownedAccessories: [],
         equippedAccessories: [],
+        friends: [],
         profile: {
           name,
           className,
@@ -258,6 +260,7 @@ const server = http.createServer(async (req, res) => {
       if (typeof body.activeVehicleId === 'string') acc.activeVehicleId = body.activeVehicleId;
       if (Array.isArray(body.ownedAccessories)) acc.ownedAccessories = body.ownedAccessories;
       if (Array.isArray(body.equippedAccessories)) acc.equippedAccessories = body.equippedAccessories;
+      if (Array.isArray(body.friends)) acc.friends = body.friends;
       if (body.profile && typeof body.profile === 'object') {
         acc.profile = { ...(acc.profile || {}), ...body.profile };
       }
