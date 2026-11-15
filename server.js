@@ -8,6 +8,40 @@ const PORT = Number(process.env.PORT) || 3000;
 const ROOT_DIR = __dirname;
 const DB_FILE = path.join(ROOT_DIR, 'accounts_db.json');
 const ADMIN_PIN = String(process.env.ADMIN_PIN || 'bocbo2026');
+const onlineRooms = new Map();
+
+const WEATHER_TYPES = ['sunny', 'cloudy', 'rainy', 'windy'];
+
+function getRealDateVN() {
+  try {
+    return new Intl.DateTimeFormat('vi-VN', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    }).format(new Date());
+  } catch (e) {
+    const d = new Date();
+    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  }
+}
+
+function createRoomEnv() {
+  return {
+    startSchoolSeconds: 6 * 3600, // Mặc định 06:00 AM khi người đầu tiên tạo phòng
+    createdAtMs: Date.now(),
+    realDate: getRealDateVN(),
+    weather: WEATHER_TYPES[Math.floor(Math.random() * WEATHER_TYPES.length)]
+  };
+}
+
+function getRoomState(roomCode) {
+  const code = String(roomCode || 'BOCBO-2026').trim().toUpperCase() || 'BOCBO-2026';
+  if (!onlineRooms.has(code)) {
+    onlineRooms.set(code, { players: new Map(), events: [], seq: 0, env: createRoomEnv() });
+  }
+  return onlineRooms.get(code);
+}
 
 function verifyAdminPin(req, body) {
   const pin = String(req.headers['x-admin-pin'] || (body && body.adminPin) || '');
@@ -294,6 +328,80 @@ const server = http.createServer(async (req, res) => {
       }
       delete db[username];
       saveAccountsDB(db);
+      return sendJSON(res, 200, { ok: true });
+    }
+
+    // =========================================================================
+    // API ĐỒNG BỘ MULTIPLAYER THỜI GIAN THỰC QUA MÁY CHỦ (PC + ĐIỆN THOẠI)
+    // =========================================================================
+    if (req.method === 'POST' && pathname === '/api/mp/sync') {
+      const body = await readJsonBody(req);
+      const room = getRoomState(body.roomCode);
+      const now = Date.now();
+      // Dọn các người chơi cũ quá hạn trước khi kiểm tra phòng trống
+      for (const [id, p] of room.players.entries()) {
+        if (now - p.lastSeen > 8000) {
+          room.players.delete(id);
+        }
+      }
+      // Nếu phòng đang trống và người đầu tiên vừa vào -> đặt lại 06:00 AM, ngày thực tế & random thời tiết mới
+      if (room.players.size === 0) {
+        room.env = createRoomEnv();
+      }
+
+      const player = body.player;
+      const pid = player && player.id ? String(player.id) : '';
+      if (pid) {
+        room.players.set(pid, {
+          ...player,
+          id: pid,
+          lastSeen: now
+        });
+      }
+
+      const others = [];
+      for (const [id, p] of room.players.entries()) {
+        if (id !== pid) others.push(p);
+      }
+
+      const hasSinceSeq = body.sinceSeq !== undefined && body.sinceSeq !== null;
+      const sinceSeq = hasSinceSeq ? Number(body.sinceSeq) : 0;
+      const newEvents = hasSinceSeq
+        ? room.events.filter(ev => ev.seq > sinceSeq && ev.senderId !== pid)
+        : [];
+
+      const elapsedVirtualSec = ((now - room.env.createdAtMs) / 1000) * 20;
+      return sendJSON(res, 200, {
+        ok: true,
+        players: others,
+        events: newEvents,
+        latestSeq: room.seq,
+        env: {
+          schoolSeconds: room.env.startSchoolSeconds + elapsedVirtualSec,
+          realDate: room.env.realDate,
+          weather: room.env.weather
+        }
+      });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/mp/event') {
+      const body = await readJsonBody(req);
+      const room = getRoomState(body.roomCode);
+      const ev = body.event;
+      if (ev && typeof ev === 'object') {
+        room.seq += 1;
+        room.events.push({ ...ev, seq: room.seq, senderId: String(body.senderId || ev.id || '') });
+        if (room.events.length > 50) {
+          room.events.splice(0, room.events.length - 50);
+        }
+      }
+      return sendJSON(res, 200, { ok: true, seq: room.seq });
+    }
+
+    if (req.method === 'POST' && pathname === '/api/mp/leave') {
+      const body = await readJsonBody(req);
+      const room = getRoomState(body.roomCode);
+      if (body.id) room.players.delete(String(body.id));
       return sendJSON(res, 200, { ok: true });
     }
 

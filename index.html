@@ -3414,8 +3414,12 @@
     </div>
 
     <div class="clock-row">
-      <div class="clock-display" id="school-clock">06:45 AM</div>
+      <div class="clock-display" id="school-clock">06:00 AM</div>
       <div class="gate-status-badge" id="gate-badge">Cổng trường: MỞ</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; margin:4px 0 6px 0; font-size:11px; font-weight:700;">
+      <span style="color:#cbd5e1; background:rgba(15,23,42,0.55); padding:3px 8px; border-radius:7px; border:1px solid rgba(148,163,184,0.22);">📅 <span id="school-date">--/--/----</span></span>
+      <span id="school-weather-badge" style="color:#fde047; background:rgba(250,204,21,0.12); padding:3px 8px; border-radius:7px; border:1px solid rgba(250,204,21,0.3);">☀️ Nắng đẹp</span>
     </div>
 
     <div class="stats-grid">
@@ -8769,28 +8773,16 @@
       npcs.red1.mesh = createCharacterMesh('male', 'sport', npcs.red1.name, npcs.red1.className, { tagType: 'npc-red', hasRedArmband: true, hasBackpack: true });
       npcs.red1.mesh.position.copy(npcs.red1.pos); scene.add(npcs.red1.mesh);
 
-      npcs.red2.mesh = createCharacterMesh('female', 'sport', npcs.red2.name, npcs.red2.className, { hairStyle: 'ponytail', tagType: 'npc-red', hasRedArmband: true, hasBackpack: true });
-      npcs.red2.mesh.position.copy(npcs.red2.pos); scene.add(npcs.red2.mesh);
-
+      // Sân trường gọn thoáng: giữ Bác Bảo Vệ, Cô Căng-tin, 1 Sao Đỏ (red1) và 2 bạn học sinh đứng hai bên sân
       npcs.guard.mesh = createCharacterMesh('male', 'guard', npcs.guard.name, npcs.guard.className, { hairColor: 'grey', tagType: 'npc-guard', hasBackpack: false });
       npcs.guard.mesh.position.copy(npcs.guard.pos); npcs.guard.mesh.rotation.y = -Math.PI / 2; scene.add(npcs.guard.mesh);
 
       npcs.canteenLady.mesh = createCharacterMesh('female', 'canteen', npcs.canteenLady.name, npcs.canteenLady.className, { hairStyle: 'ponytail', tagType: 'npc-canteen', hasBackpack: false });
       npcs.canteenLady.mesh.position.copy(npcs.canteenLady.pos); scene.add(npcs.canteenLady.mesh);
 
-      // Nhân vật Thầy hướng dẫn CLB AI đứng bên lề lối đi (gần bốt bảo vệ & cây xanh, không chắn đường đi)
-      npcs.mentor.mesh = createCharacterMesh('male', 'winter', npcs.mentor.name, npcs.mentor.className, { hairStyle: 'sidepart', hairColor: 'black', tagType: 'other', hasBackpack: false, glasses: true });
-      npcs.mentor.mesh.position.copy(npcs.mentor.pos);
-      npcs.mentor.mesh.rotation.y = -0.55;
-      scene.add(npcs.mentor.mesh);
-
-      // Các bạn học sinh đứng trò chuyện trên sân trường (tạo không khí học đường sống động như ảnh mẫu)
       window.campusStudents = [
-        { name: 'Hà My', className: '11A2', gender: 'female', outfit: 'classic', hairStyle: 'ponytail', pos: new THREE.Vector3(-8.5, 0, 11.5), rotY: 0.7, quote: 'Tiếng trống ra chơi là bản nhạc hay nhất thế giới! 🔔' },
-        { name: 'Gia Huy', className: '11A1', gender: 'male', outfit: 'classic', hairStyle: 'short', pos: new THREE.Vector3(8.5, 0, 10.5), rotY: -0.9, quote: 'Đứa nào hôm qua mượn vở tớ giờ chưa trả? 📒' },
-        { name: 'Thu Trang', className: '10A2', gender: 'female', outfit: 'classic', hairStyle: 'ponytail', pos: new THREE.Vector3(-5.2, 0, -5.5), rotY: 0.4, quote: 'Lớp trưởng ơi, ghi tên ai thì ghi, đừng ghi tên tớ! 😅' },
-        { name: 'Việt Hoàng', className: '12A1', gender: 'male', outfit: 'winter', hairStyle: 'sidepart', pos: new THREE.Vector3(6.8, 0, -5.2), rotY: -0.5, quote: 'Thanh xuân như một cốc trà đá, uống mãi vẫn còn đá! 🧊' },
-        { name: 'Lan Chi', className: '10B', gender: 'female', outfit: 'sport', hairStyle: 'ponytail', pos: new THREE.Vector3(-3.8, 0, 16.5), rotY: 1.2, quote: 'Cổng trường hôm nay đẹp quá, vào lớp 10A thi đấu thôi! 🏆' }
+        { name: 'Hà My', className: '11A2', gender: 'female', outfit: 'classic', hairStyle: 'ponytail', pos: new THREE.Vector3(-11.5, 0, 12.5), rotY: 0.7, quote: 'Tiếng trống ra chơi là bản nhạc hay nhất thế giới! 🔔' },
+        { name: 'Gia Huy', className: '11A1', gender: 'male', outfit: 'classic', hairStyle: 'short', pos: new THREE.Vector3(11.5, 0, 11.5), rotY: -0.9, quote: 'Vào lớp cùng thi đua kiến thức nào! 🏆' }
       ];
       window.campusStudents.forEach((st, idx) => {
         st.mesh = createCharacterMesh(st.gender, st.outfit, st.name, st.className, {
@@ -10043,6 +10035,12 @@
         if (npcs.guard && npcs.guard.mesh) candidates.push({ id: 'guard', name: npcs.guard.name, className: npcs.guard.className, pos: npcs.guard.pos, mesh: npcs.guard.mesh, quote: 'Các cháu nhớ đi học đúng giờ, giữ gìn vệ sinh trường nhé!', role: 'guard' });
         if (npcs.red1 && npcs.red1.mesh) candidates.push({ id: 'red1', name: npcs.red1.name, className: npcs.red1.className, pos: npcs.red1.pos, mesh: npcs.red1.mesh, quote: 'Tớ đang trực Sao Đỏ, nhớ mặc đồng phục chỉnh tề nhé!', role: 'redcross' });
         if (npcs.red2 && npcs.red2.mesh) candidates.push({ id: 'red2', name: npcs.red2.name, className: npcs.red2.className, pos: npcs.red2.pos, mesh: npcs.red2.mesh, quote: 'Chúc cậu một ngày học tập thật nhiều điểm 10!', role: 'redcross' });
+        for (const pid in otherPlayers) {
+          const op = otherPlayers[pid];
+          if (op && op.mesh) {
+            candidates.push({ id: 'peer_' + pid, name: op.name, className: op.className || 'Bạn chơi', pos: op.mesh.position, mesh: op.mesh, quote: 'Rất vui được gặp bạn trong Trường THPT Bộc Bố!', role: 'peer' });
+          }
+        }
 
         let best = null;
         let minDist = 2.6;
@@ -10328,8 +10326,109 @@
     /********************************************************************
      * 6. ĐỒNG HỒ TRƯỜNG HỌC & AI NPC
      ********************************************************************/
-    let schoolSeconds = (6 * 60 + 45) * 60;
+    let schoolSeconds = 6 * 3600;
     let hasPlayedDrumCall = false;
+    let currentRoomWeather = '';
+    let weatherParticleSystem = null;
+    let weatherParticleVelocities = [];
+
+    const WEATHER_META = {
+      sunny: { label: '☀️ Nắng đẹp', sky: 0x87ceeb, fog: 0x87ceeb, sun: 1.15, amb: 0.72 },
+      cloudy: { label: '⛅ Có mây mát', sky: 0x94a3b8, fog: 0x94a3b8, sun: 0.78, amb: 0.68 },
+      rainy: { label: '🌧️ Mưa rào', sky: 0x64748b, fog: 0x64748b, sun: 0.52, amb: 0.58 },
+      windy: { label: '🍃 Gió mát', sky: 0x7dd3fc, fog: 0x7dd3fc, sun: 1.0, amb: 0.70 }
+    };
+
+    function getLocalRealDateVN() {
+      try {
+        return new Intl.DateTimeFormat('vi-VN', {
+          timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric'
+        }).format(new Date());
+      } catch (e) {
+        const d = new Date();
+        return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+      }
+    }
+
+    function applyRoomWeather(weatherType, notify = false) {
+      const wType = WEATHER_META[weatherType] ? weatherType : 'sunny';
+      if (currentRoomWeather === wType) return;
+      currentRoomWeather = wType;
+      const meta = WEATHER_META[wType];
+
+      const badge = document.getElementById('school-weather-badge');
+      if (badge) badge.textContent = meta.label;
+
+      if (scene) {
+        scene.background = new THREE.Color(meta.sky);
+        if (scene.fog) scene.fog.color.setHex(meta.fog);
+      }
+      if (typeof sunLight !== 'undefined' && sunLight) sunLight.intensity = meta.sun;
+      if (typeof ambientLight !== 'undefined' && ambientLight) ambientLight.intensity = meta.amb;
+
+      if (weatherParticleSystem) {
+        scene.remove(weatherParticleSystem);
+        weatherParticleSystem.geometry?.dispose();
+        weatherParticleSystem.material?.dispose();
+        weatherParticleSystem = null;
+        weatherParticleVelocities = [];
+      }
+
+      if (wType === 'rainy' || wType === 'windy') {
+        const count = wType === 'rainy' ? 420 : 120;
+        const positions = new Float32Array(count * 3);
+        weatherParticleVelocities = [];
+        for (let i = 0; i < count; i++) {
+          positions[i * 3] = (Math.random() - 0.5) * 44;
+          positions[i * 3 + 1] = 0.5 + Math.random() * 18;
+          positions[i * 3 + 2] = (Math.random() - 0.5) * 44;
+          weatherParticleVelocities.push(
+            wType === 'rainy'
+              ? { vx: -1.2, vy: -18 - Math.random() * 6, vz: 0.4 }
+              : { vx: 2.8 + Math.random() * 2.0, vy: -0.9 - Math.random() * 0.6, vz: (Math.random() - 0.5) * 1.4 }
+          );
+        }
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const mat = new THREE.PointsMaterial({
+          color: wType === 'rainy' ? 0xbae6fd : 0xbef264,
+          size: wType === 'rainy' ? 0.16 : 0.22,
+          transparent: true,
+          opacity: wType === 'rainy' ? 0.72 : 0.8
+        });
+        weatherParticleSystem = new THREE.Points(geo, mat);
+        scene.add(weatherParticleSystem);
+      }
+
+      if (notify && typeof showToast === 'function') {
+        showToast(`🌤️ Thời tiết hôm nay tại trường: ${meta.label}`);
+      }
+    }
+
+    function updateWeatherParticles(dt) {
+      if (!weatherParticleSystem || isIn3DClassroom) {
+        if (weatherParticleSystem) weatherParticleSystem.visible = false;
+        return;
+      }
+      weatherParticleSystem.visible = true;
+      const posAttr = weatherParticleSystem.geometry.attributes.position;
+      const arr = posAttr.array;
+      const cx = myPlayer.pos.x;
+      const cz = myPlayer.pos.z;
+      for (let i = 0; i < weatherParticleVelocities.length; i++) {
+        const v = weatherParticleVelocities[i];
+        const idx = i * 3;
+        arr[idx] += v.vx * dt;
+        arr[idx + 1] += v.vy * dt;
+        arr[idx + 2] += v.vz * dt;
+        if (arr[idx + 1] < 0.1 || Math.abs(arr[idx] - cx) > 24 || Math.abs(arr[idx + 2] - cz) > 24) {
+          arr[idx] = cx + (Math.random() - 0.5) * 44;
+          arr[idx + 1] = 14 + Math.random() * 6;
+          arr[idx + 2] = cz + (Math.random() - 0.5) * 44;
+        }
+      }
+      posAttr.needsUpdate = true;
+    }
 
     function updateSchoolClock(dt) {
       schoolSeconds += dt * 20; // 3s thực = 1 phút ảo
@@ -11230,7 +11329,7 @@
       bubbleEl.style.top = `${(-(headWorld.y * 0.5) + 0.5) * window.innerHeight}px`;
     }
 
-    // Gửi gói tin mạng (qua BroadcastChannel và PeerJS)
+    // Gửi gói tin mạng (qua BroadcastChannel, PeerJS và Máy chủ HTTP Relay)
     function broadcastNetworkPacket(packet) {
       if (broadcastChannel) {
         try { broadcastChannel.postMessage(packet); } catch (e) { }
@@ -11240,6 +11339,13 @@
         if (conn && conn.open) {
           try { conn.send(packet); } catch (e) { }
         }
+      }
+      if (packet && packet.type !== 'sync' && isAuthServerOnline) {
+        fetch(AUTH_API_BASE + '/api/mp/event', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ roomCode: currentRoomCode, senderId: myPlayerId, event: packet })
+        }).catch(() => { });
       }
     }
 
@@ -11455,12 +11561,117 @@
         console.warn('BroadcastChannel error:', err);
       }
 
-      // 2. Kênh PeerJS WebRTC (kết nối qua Internet giữa các máy/điện thoại khác nhau)
+      // 2. Kênh PeerJS WebRTC
       initPeerJS();
+
+      // Khởi tạo ngày thực tế, giờ 06:00 AM & thời tiết ngẫu nhiên (sẽ tự đồng bộ theo phòng nếu có server)
+      schoolSeconds = 6 * 3600;
+      const dateEl = document.getElementById('school-date');
+      if (dateEl) dateEl.textContent = getLocalRealDateVN();
+      const weatherKeys = ['sunny', 'cloudy', 'rainy', 'windy'];
+      applyRoomWeather(weatherKeys[Math.floor(Math.random() * weatherKeys.length)], false);
+
+      // 3. Kênh Đồng Bộ Trực Tiếp Qua Máy Chủ (PC & Điện thoại trên Render / LAN luôn nhìn thấy nhau!)
+      startServerMultiplayerSync();
 
       updateOnlineCountDisplay();
       addChatMessageToUI(null, null, `Bạn đã tham gia phòng [${currentRoomCode}] thành công!`, true);
     }
+
+    let _mpSyncInterval = null;
+    let _mpSyncInFlight = false;
+    let _mpLastEventSeq = 0;
+
+    function startServerMultiplayerSync() {
+      if (_mpSyncInterval) clearInterval(_mpSyncInterval);
+      _mpLastEventSeq = 0;
+
+      const doSync = async () => {
+        if (!isGameStarted || _mpSyncInFlight) return;
+        if (!isAuthServerOnline && !window.location.protocol.startsWith('http')) return;
+        _mpSyncInFlight = true;
+        try {
+          const isMoving = Math.abs(keys.forward - keys.backward) > 0 || Math.abs(keys.right - keys.left) > 0 || Math.hypot(joystickVector.x, joystickVector.y) > 0.08;
+          const res = await fetch(AUTH_API_BASE + '/api/mp/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              roomCode: currentRoomCode,
+              sinceSeq: _mpLastEventSeq,
+              player: {
+                id: myPlayerId,
+                name: myPlayer.data.name,
+                className: myPlayer.data.className,
+                gender: myPlayer.data.gender,
+                outfit: myPlayer.data.outfit,
+                hairStyle: myPlayer.data.hairStyle,
+                hairColor: myPlayer.data.hairColor,
+                glasses: myPlayer.data.glasses,
+                vehicleId: activeVehicleId,
+                pos: { x: myPlayer.pos.x, y: myPlayer.pos.y, z: myPlayer.pos.z },
+                rotY: myPlayer.rotY,
+                isMoving,
+                isSeated: isSeatedIn3D || isSeatedOnCampus
+              }
+            })
+          });
+          if (res.ok) {
+            isAuthServerOnline = true;
+            const data = await res.json();
+            if (data && data.ok) {
+              if (data.env) {
+                const dateEl = document.getElementById('school-date');
+                if (dateEl && data.env.realDate) dateEl.textContent = data.env.realDate;
+                if (data.env.weather && data.env.weather !== currentRoomWeather) {
+                  applyRoomWeather(data.env.weather, true);
+                }
+                if (typeof data.env.schoolSeconds === 'number' && Math.abs(schoolSeconds - data.env.schoolSeconds) > 25) {
+                  schoolSeconds = data.env.schoolSeconds;
+                }
+              }
+              if (typeof data.latestSeq === 'number' && data.latestSeq > _mpLastEventSeq) {
+                _mpLastEventSeq = data.latestSeq;
+              }
+              const activeSet = new Set();
+              if (Array.isArray(data.players)) {
+                for (const p of data.players) {
+                  activeSet.add(p.id);
+                  handleIncomingNetworkPacket({ type: 'sync', ...p });
+                }
+              }
+              if (Array.isArray(data.events)) {
+                for (const ev of data.events) {
+                  handleIncomingNetworkPacket(ev);
+                }
+              }
+              // Xóa người chơi đã rời phòng hoặc mất kết nối
+              for (const pid in otherPlayers) {
+                if (!activeSet.has(pid) && Date.now() - otherPlayers[pid].lastSeen > 8500) {
+                  removeOtherPlayer(pid, true);
+                }
+              }
+            }
+          }
+        } catch (e) { }
+        finally {
+          _mpSyncInFlight = false;
+        }
+      };
+
+      doSync();
+      _mpSyncInterval = setInterval(doSync, 180);
+    }
+
+    window.addEventListener('beforeunload', () => {
+      if (isGameStarted && isAuthServerOnline && navigator.sendBeacon) {
+        try {
+          navigator.sendBeacon(
+            AUTH_API_BASE + '/api/mp/leave',
+            new Blob([JSON.stringify({ roomCode: currentRoomCode, id: myPlayerId })], { type: 'application/json' })
+          );
+        } catch (e) { }
+      }
+    });
 
     // =========================================================================
     // SỰ KIỆN GIAO DIỆN TABS & SERVER SELECTION TRÊN MODAL
@@ -16134,6 +16345,7 @@
       }
 
       updateCutsceneParticles(dt);
+      updateWeatherParticles(dt);
 
       // Clip mở đầu: đi xe hoặc đi bộ đến trường với hiệu ứng điện ảnh & hạt tốc độ
       if (arrivalCutscene.active) {
@@ -16529,7 +16741,7 @@
 
       // Cập nhật các NPC và vật lý thế giới
       updateRedCrossNPC(npcs.red1, dt);
-      updateRedCrossNPC(npcs.red2, dt);
+      if (npcs.red2 && npcs.red2.mesh) updateRedCrossNPC(npcs.red2, dt);
       updateSecurityGuard(dt);
       updateSoccerBall(dt);
       updateBasketballPhysics(dt);
@@ -16538,7 +16750,7 @@
       // Cập nhật thẻ tên nổi trên đầu
       updateFloatingLabel(myPlayer.mesh, myPlayer.pos);
       updateFloatingLabel(npcs.red1.mesh, npcs.red1.pos);
-      updateFloatingLabel(npcs.red2.mesh, npcs.red2.pos);
+      if (npcs.red2 && npcs.red2.mesh) updateFloatingLabel(npcs.red2.mesh, npcs.red2.pos);
       updateFloatingLabel(npcs.guard.mesh, npcs.guard.pos);
       updateFloatingLabel(npcs.canteenLady.mesh, npcs.canteenLady.pos);
       if (npcs.mentor && npcs.mentor.mesh) {
