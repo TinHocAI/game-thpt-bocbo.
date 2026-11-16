@@ -888,7 +888,7 @@
       position: fixed;
       top: 16px;
       right: 174px;
-      z-index: 46;
+      z-index: 35;
       padding: 6px 11px;
       border-radius: 10px;
       border: 1px solid rgba(56, 189, 248, 0.5);
@@ -1074,44 +1074,108 @@
       height: 114px;
     }
 
+    /* Tối ưu cực gọn giao diện trong Lớp học 3D trên Điện thoại (không đè Joystick & nút cảm ứng!) */
     body.mobile-mode #cls3d-seat-minimap {
-      bottom: 146px !important;
-      left: 10px !important;
-      transform: scale(0.8);
-      transform-origin: bottom left;
+      display: none !important;
+    }
+
+    body.mobile-mode.in-3d-classroom #chat-container {
+      bottom: auto !important;
+      top: 56px !important;
+      left: 8px !important;
+      width: auto !important;
+      max-width: 185px;
     }
 
     body.mobile-mode #cls3d-bottom-stack {
-      bottom: 136px;
-      width: calc(100vw - 20px);
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100vw - 270px);
+      min-width: 220px;
+      max-width: 540px;
+      z-index: 25;
+    }
+
+    body.mobile-mode .cls3d-bottom-toolbar {
+      gap: 4px;
+      padding: 5px 7px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    body.mobile-mode .cls3d-tool-btn {
+      padding: 5px 8px;
+      font-size: 10.5px;
+      border-radius: 8px;
+    }
+
+    body.mobile-mode #btn-cls3d-collapse-toggle {
+      font-size: 10px;
+      padding: 4px 9px;
     }
 
     body.mobile-mode #onboard-game-dock {
       width: 100%;
-      max-height: 36vh;
+      max-height: 28vh;
       overflow-y: auto;
-      padding: 8px 10px;
+      padding: 6px 8px;
     }
 
     body.mobile-mode .cls3d-top-banner {
       top: 6px;
-      padding: 6px 12px;
-      max-width: calc(100vw - 175px);
+      padding: 4px 10px;
+      max-width: calc(100vw - 260px);
     }
 
     body.mobile-mode #cls3d-room-title {
-      font-size: 11.5px;
+      font-size: 11px;
     }
 
     body.mobile-mode #cls3d-room-subtitle {
-      font-size: 9.5px;
+      display: none;
     }
 
     body.mobile-mode #btn-cls3d-exit {
-      top: 6px;
-      right: 8px;
+      display: none !important;
+    }
+
+    body.mobile-mode #room-activity-modal {
+      padding: 6px;
+    }
+
+    body.mobile-mode .room-act-card {
+      max-height: 96vh;
+      border-radius: 14px;
+    }
+
+    body.mobile-mode .room-act-header {
       padding: 7px 10px;
+      gap: 6px;
+    }
+
+    body.mobile-mode .room-act-badge {
+      font-size: 10.5px;
+      padding: 3px 8px;
+    }
+
+    body.mobile-mode .room-act-title {
+      font-size: 13px;
+    }
+
+    body.mobile-mode .room-act-sub {
+      display: none;
+    }
+
+    body.mobile-mode .room-stat-pill,
+    body.mobile-mode .room-act-close-btn,
+    body.mobile-mode .room-act-exit-campus-btn {
+      padding: 4px 8px;
       font-size: 11px;
+    }
+
+    body.mobile-mode .room-act-body {
+      padding: 10px 12px;
     }
 
     @media (max-width: 960px), (max-height: 540px) {
@@ -2840,8 +2904,9 @@
     .chess-board-grid {
       display: grid;
       grid-template-columns: repeat(8, 1fr);
-      width: min(360px, 86vw);
-      aspect-ratio: 1 / 1;
+      grid-template-rows: repeat(8, 1fr);
+      width: min(340px, 56vh, 84vw);
+      height: min(340px, 56vh, 84vw);
       border: 3px solid #f59e0b;
       border-radius: 8px;
       overflow: hidden;
@@ -2878,8 +2943,9 @@
     .caro-board-grid {
       display: grid;
       grid-template-columns: repeat(12, 1fr);
-      width: min(360px, 88vw);
-      aspect-ratio: 1 / 1;
+      grid-template-rows: repeat(12, 1fr);
+      width: min(340px, 56vh, 84vw);
+      height: min(340px, 56vh, 84vw);
       background: #fef9c3;
       border: 2px solid #ca8a04;
       border-radius: 8px;
@@ -4203,7 +4269,7 @@
           <span>🔍</span> Nhìn Gần Bảng [G]
         </button>
         <button type="button" class="cls3d-tool-btn" id="btn-cls3d-toggle-games"
-          style="background: linear-gradient(135deg, #f59e0b, #ea580c); border: 1px solid #fde68a;">
+          style="display:none; background: linear-gradient(135deg, #f59e0b, #ea580c); border: 1px solid #fde68a;">
           <span>🎮</span> Đổi Game (8)
         </button>
         <button type="button" class="cls3d-tool-btn primary-blue" id="btn-cls3d-hand">
@@ -4233,8 +4299,11 @@
         </div>
       </div>
 
-      <!-- Thanh chuyển nhanh giữa 7 phòng học -->
-      <div class="room-act-tabs">
+      <!-- Thanh thông báo phòng riêng biệt (khóa chuyển phòng chéo: phải ra sân trường đi vào đúng cửa phòng) -->
+      <div id="room-exclusive-notice" style="padding:7px 16px; background:rgba(2,6,23,0.65); border-bottom:1px solid rgba(56,189,248,0.25); font-size:11.5px; color:#bae6fd; display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;">
+        <span id="room-exclusive-text">🔒 Phòng học riêng biệt: Bạn chỉ xem được kiến thức & hoạt động của phòng đang đứng. Muốn sang môn/phòng khác, hãy bước ra sân trường đi vào đúng cửa phòng!</span>
+      </div>
+      <div class="room-act-tabs" style="display:none;">
         <button type="button" class="room-tab-btn active" data-rkey="10A" data-rname="PHÒNG HỌC 10A">🔤 10A: Nối
           Từ</button>
         <button type="button" class="room-tab-btn" data-rkey="10B" data-rname="PHÒNG HỌC 10B">🧩 10B: Đuổi Hình & Ca
@@ -4668,8 +4737,16 @@
                 <button type="button" id="arena-mode-pvp" class="arena-subtab-btn">🌐 Đấu Online</button>
               </div>
             </div>
-            <div id="arena-mode-banner" style="font-size:12px; color:#fde047; background:rgba(2,6,23,0.65); padding:6px 10px; border-radius:8px; margin-bottom:12px; border:1px solid rgba(250,204,21,0.25);">
-              🤖 Chế độ Đấu Máy AI: Hoàn thành ván thắng nhận ngay Xu & Điểm Năng Động! Bấm "🌐 Đấu Online" để thi đấu với bạn cùng phòng.
+            <div id="arena-mode-banner" style="font-size:12px; color:#fde047; background:rgba(2,6,23,0.65); padding:6px 10px; border-radius:8px; margin-bottom:8px; border:1px solid rgba(250,204,21,0.25);">
+              🤖 Chế độ Đấu Máy AI: Hoàn thành ván thắng nhận ngay Xu & Điểm Năng Động! Bấm "🌐 Đấu Online" để tạo/nhập Mã Phòng đấu với bạn bè.
+            </div>
+            <div id="arena-match-code-bar" style="display:none; flex-wrap:wrap; align-items:center; gap:6px; background:rgba(6,78,59,0.35); border:1.5px solid rgba(52,211,153,0.55); border-radius:10px; padding:8px 10px; margin-bottom:10px;">
+              <span style="font-size:12px; font-weight:900; color:#6ee7b7;">🔑 Mã Phòng Đấu:</span>
+              <input type="text" id="arena-match-code-input" value="PK-1001" maxlength="14" style="width:105px; padding:5px 8px; border-radius:7px; border:1px solid #34d399; background:#0f172a; color:#fde047; font-weight:900; font-size:12.5px; text-transform:uppercase; text-align:center;" />
+              <button type="button" id="btn-arena-create-code" class="ob-opt-btn" style="background:#059669; padding:5px 9px; font-size:11.5px;">🎲 Tạo Mã Mới</button>
+              <button type="button" id="btn-arena-join-code" class="ob-opt-btn" style="background:#0284c7; padding:5px 9px; font-size:11.5px;">🔗 Vào Mã Này</button>
+              <button type="button" id="btn-arena-copy-code" class="ob-opt-btn" style="padding:5px 9px; font-size:11.5px;">📋 Copy</button>
+              <span id="arena-match-status" style="font-size:11px; color:#cbd5e1; margin-left:auto;">Đang ghép qua mã: <strong style="color:#fde047;">PK-1001</strong></span>
             </div>
 
             <!-- 1. RUBIK 3x3 -->
@@ -15841,6 +15918,11 @@
         p.classList.toggle('active', p.id === `pane-room-${validKey}`);
       });
 
+      const excTxt = document.getElementById('room-exclusive-text');
+      if (excTxt) {
+        if (validKey === 'AI') excTxt.textContent = '🔒 Bạn đang ở Phòng Tự Học — Thư viện Sưu tầm 20 Đầu sách & Bảng Nhóm.';
+        else if (validKey === 'ARENA') excTxt.textContent = '🔒 Bạn đang ở Phòng Đối Kháng Trí Tuệ — Chọn "🌐 Đấu Online" & nhập Mã Phòng để thách đấu 1v1!';
+      }
       const isGradeRoom = ['10A', '10B', '11A', '11B', '12A', '12B'].includes(validKey);
       const modeBar = document.getElementById('kntt-mode-bar');
       if (modeBar) modeBar.style.display = isGradeRoom ? 'flex' : 'none';
@@ -16301,18 +16383,35 @@
     document.getElementById('btn-mode-kntt-study')?.addEventListener('click', () => { setGradeRoomStudyMode('study'); sound.playClick(); });
     document.getElementById('btn-mode-room-game')?.addEventListener('click', () => { setGradeRoomStudyMode('game'); sound.playClick(); });
 
+    const ROOM_EXCLUSIVE_SUBJECTS = {
+      '10A': { label: 'Tổ Hợp Tự Nhiên & Toán-Tin (Lớp 10A)', subjects: ['toan', 'ly', 'hoa', 'tin'] },
+      '10B': { label: 'Tổ Hợp Xã Hội & Ngôn Ngữ (Lớp 10B)', subjects: ['van', 'anh', 'sinh', 'sudia'] },
+      '11A': { label: 'Tổ Hợp Tự Nhiên & Toán-Tin (Lớp 11A)', subjects: ['toan', 'ly', 'hoa', 'tin'] },
+      '11B': { label: 'Tổ Hợp Xã Hội & Nhân Văn (Lớp 11B)', subjects: ['van', 'anh', 'sinh', 'sudia'] },
+      '12A': { label: 'Tổ Hợp Tự Nhiên & AI-Web (Lớp 12A)', subjects: ['toan', 'ly', 'hoa', 'tin'] },
+      '12B': { label: 'Tổ Hợp Xã Hội & Ôn Thi THPT (Lớp 12B)', subjects: ['van', 'anh', 'sinh', 'sudia'] }
+    };
+
     function renderKnttHubForRoom(roomKey) {
       const gradeBand = getGradeBandFromRoom(roomKey);
+      const roomSpec = ROOM_EXCLUSIVE_SUBJECTS[roomKey] || { label: `Lớp ${gradeBand}`, subjects: ['toan', 'ly', 'hoa', 'tin'] };
+      const allowedTabs = KNTT_SUBJECT_TABS.filter(s => roomSpec.subjects.includes(s.id));
+      if (!allowedTabs.some(s => s.id === currentKnttSubject) && allowedTabs.length > 0) {
+        currentKnttSubject = allowedTabs[0].id;
+      }
+
       const tag = document.getElementById('kntt-grade-tag');
       const heading = document.getElementById('kntt-hub-heading');
       const rdocLbl = document.getElementById('rdoc-room-label');
-      if (tag) tag.textContent = `SGK Kết Nối Tri Thức — Khối ${gradeBand}`;
-      if (heading) heading.textContent = `📘 KIẾN THỨC SGK KẾT NỐI TRI THỨC LỚP ${gradeBand} (ĐỦ 8 MÔN)`;
+      const excTxt = document.getElementById('room-exclusive-text');
+      if (tag) tag.textContent = `SGK Kết Nối Tri Thức — ${roomSpec.label}`;
+      if (heading) heading.textContent = `📘 CHUYÊN ĐỀ RIÊNG PHÒNG ${roomKey} — SGK KẾT NỐI TRI THỨC LỚP ${gradeBand}`;
       if (rdocLbl) rdocLbl.textContent = roomKey;
+      if (excTxt) excTxt.textContent = `🔒 Bạn đang ở Phòng ${roomKey} (${roomSpec.label}). Muốn học môn của phòng khác, hãy ra sân trường và vào đúng cửa phòng đó!`;
 
       const pillsBox = document.getElementById('kntt-subj-pills');
       if (pillsBox) {
-        pillsBox.innerHTML = KNTT_SUBJECT_TABS.map(s =>
+        pillsBox.innerHTML = allowedTabs.map(s =>
           `<button type="button" class="kntt-subj-btn ${currentKnttSubject === s.id ? 'active' : ''}" data-subj="${s.id}">${s.label}</button>`
         ).join('');
         pillsBox.querySelectorAll('.kntt-subj-btn').forEach(btn => {
@@ -16818,25 +16917,69 @@
       });
     });
 
+    let currentArenaMatchCode = 'PK-1001';
+
+    function updateArenaMatchStatusUI(customNote) {
+      const inp = document.getElementById('arena-match-code-input');
+      if (inp) inp.value = currentArenaMatchCode;
+      const st = document.getElementById('arena-match-status');
+      if (st) {
+        st.innerHTML = customNote || `Đang dùng mã: <strong style="color:#fde047;">${currentArenaMatchCode}</strong>`;
+      }
+    }
+
     function setArenaPlayMode(mode) {
       arenaMode = mode;
       const bAi = document.getElementById('arena-mode-ai');
       const bPvp = document.getElementById('arena-mode-pvp');
       const banner = document.getElementById('arena-mode-banner');
+      const codeBar = document.getElementById('arena-match-code-bar');
       if (bAi) bAi.style.background = mode === 'ai' ? 'linear-gradient(135deg,#0284c7,#2563eb)' : 'rgba(30,41,59,0.85)';
       if (bPvp) bPvp.style.background = mode === 'pvp' ? 'linear-gradient(135deg,#059669,#16a34a)' : 'rgba(30,41,59,0.85)';
+      if (codeBar) codeBar.style.display = mode === 'pvp' ? 'flex' : 'none';
       if (banner) {
         banner.textContent = mode === 'ai'
           ? '🤖 Chế độ Đấu Máy AI: Hoàn thành ván thắng nhận ngay Xu & Điểm Năng Động!'
-          : '🌐 Chế độ Đấu Online: Mọi thao tác & nước cờ sẽ đồng bộ trực tiếp tới người chơi khác trong phòng!';
+          : `🌐 Chế độ Đấu Online (Mã phòng ${currentArenaMatchCode}): Đưa mã cho bạn cùng trường nhập rồi bấm Tạo/Chơi ván mới!`;
       }
+      updateArenaMatchStatusUI();
     }
     document.getElementById('arena-mode-ai')?.addEventListener('click', () => setArenaPlayMode('ai'));
     document.getElementById('arena-mode-pvp')?.addEventListener('click', () => setArenaPlayMode('pvp'));
 
+    document.getElementById('btn-arena-create-code')?.addEventListener('click', () => {
+      currentArenaMatchCode = 'PK-' + (1000 + Math.floor(Math.random() * 8999));
+      setArenaPlayMode('pvp');
+      sound.playBuySuccess();
+      showToast(`🎲 Đã tạo Mã Phòng Đối Kháng: ${currentArenaMatchCode} — Gửi mã này cho bạn của bạn!`);
+      broadcastArenaSync({ game: arenaActiveGame, action: 'join_announce' });
+    });
+
+    document.getElementById('btn-arena-join-code')?.addEventListener('click', () => {
+      const val = (document.getElementById('arena-match-code-input')?.value || '').trim().toUpperCase();
+      if (!val) { showToast('⚠️ Hãy nhập Mã Phòng (VD: PK-1001)!'); return; }
+      currentArenaMatchCode = val;
+      setArenaPlayMode('pvp');
+      sound.playClick();
+      showToast(`🔗 Đã vào Mã Phòng Đối Kháng: ${currentArenaMatchCode}!`);
+      broadcastArenaSync({ game: arenaActiveGame, action: 'join_announce' });
+    });
+
+    document.getElementById('btn-arena-copy-code')?.addEventListener('click', () => {
+      if (navigator.clipboard) navigator.clipboard.writeText(currentArenaMatchCode).catch(() => {});
+      showToast(`📋 Đã sao chép Mã Phòng: ${currentArenaMatchCode}`);
+      sound.playClick();
+    });
+
     function broadcastArenaSync(payload) {
       if (arenaMode !== 'pvp' || typeof broadcastNetworkPacket !== 'function') return;
-      broadcastNetworkPacket({ type: 'arena_sync', id: myPlayerId, name: myPlayer.data.name, ...payload });
+      broadcastNetworkPacket({
+        type: 'arena_sync',
+        id: myPlayerId,
+        name: myPlayer.data.name,
+        matchCode: currentArenaMatchCode,
+        ...payload
+      });
     }
 
     function rewardArenaWin(coins, score, msg) {
@@ -17597,7 +17740,17 @@
     // Đồng bộ Mạng Online cho Phòng Đối Kháng (arena_sync)
     function handleIncomingArenaSync(packet) {
       if (!packet || packet.id === myPlayerId) return;
-      setArenaPlayMode('pvp');
+      const incomingCode = String(packet.matchCode || 'PK-1001').trim().toUpperCase();
+      if (arenaMode === 'pvp' && incomingCode !== currentArenaMatchCode) return;
+      if (arenaMode !== 'pvp') {
+        currentArenaMatchCode = incomingCode;
+        setArenaPlayMode('pvp');
+      }
+      updateArenaMatchStatusUI(`🟢 Ghép cặp cùng <strong style="color:#4ade80;">${packet.name || 'Đối thủ'}</strong> (Mã: ${currentArenaMatchCode})`);
+      if (packet.action === 'join_announce') {
+        showToast(`🤝 ${packet.name || 'Đối thủ'} đã vào Mã Phòng Đối Kháng ${currentArenaMatchCode}!`);
+        return;
+      }
       if (packet.game === 'rubik') {
         if (packet.action === 'scramble' && Array.isArray(packet.seq)) {
           startRubikMatchWithSequence(packet.seq, true);
@@ -19258,33 +19411,22 @@
       dockWrap.style.display = 'flex';
 
       if (selectorBar) {
-        const normActive = gKey === '10' ? '10A' : (gKey === '11' ? '11A' : gKey);
-        selectorBar.innerHTML = '<span style="font-size:11px; color:#94a3b8; font-weight:800; flex-shrink:0; margin-right:2px;">🎮 Chọn game:</span>' +
-          ALL_CLASSROOM_GAMES.map(g =>
-            `<button type="button" class="game-pick-pill ${normActive === g.key ? 'active' : ''}" data-game-key="${g.key}">${g.label}</button>`
-          ).join('');
-        selectorBar.querySelectorAll('.game-pick-pill').forEach(btn => {
-          btn.addEventListener('click', () => selectClassroomGame(btn.dataset.gameKey));
-        });
-      }
-
-      // Nút mở nhanh Tủ Kiến Thức SGK Kết Nối Tri Thức & Đưa File Tài Liệu Riêng ngay dưới Bảng 3D
-      if (selectorBar && ['10A', '10B', '11A', '11B', '12A', '12B', '10', '11', '12'].includes(gKey)) {
-        const extra = document.createElement('span');
-        extra.style.display = 'inline-flex';
-        extra.style.gap = '6px';
-        extra.style.marginLeft = 'auto';
-        extra.innerHTML = `
-          <button type="button" class="game-pick-pill" id="dock-open-kntt" style="background:linear-gradient(135deg,#0284c7,#2563eb); color:#fff; border-color:#38bdf8;">📘 SGK Kết Nối Tri Thức</button>
-          <button type="button" class="game-pick-pill" id="dock-open-rdocs" style="background:linear-gradient(135deg,#d97706,#ea580c); color:#fff; border-color:#fde047;">📂 Đưa File Riêng</button>
-        `;
-        selectorBar.appendChild(extra);
-        extra.querySelector('#dock-open-kntt')?.addEventListener('click', () => {
-          if (typeof openKnttStudyMode === 'function') openKnttStudyMode(gKey);
-        });
-        extra.querySelector('#dock-open-rdocs')?.addEventListener('click', () => {
-          if (typeof openKnttStudyMode === 'function') openKnttStudyMode(gKey, true);
-        });
+        if (['10A', '10B', '11A', '11B', '12A', '12B', '10', '11', '12'].includes(gKey)) {
+          selectorBar.style.display = 'flex';
+          selectorBar.innerHTML = `
+            <span style="font-size:11px; color:#fde047; font-weight:800; flex-shrink:0;">🔒 Phòng ${gKey}:</span>
+            <button type="button" class="game-pick-pill" id="dock-open-kntt" style="background:linear-gradient(135deg,#0284c7,#2563eb); color:#fff; border-color:#38bdf8;">📘 Học SGK KNTT (${gKey})</button>
+            <button type="button" class="game-pick-pill" id="dock-open-rdocs" style="background:linear-gradient(135deg,#d97706,#ea580c); color:#fff; border-color:#fde047;">📂 Đưa File Riêng</button>
+          `;
+          selectorBar.querySelector('#dock-open-kntt')?.addEventListener('click', () => {
+            if (typeof openKnttStudyMode === 'function') openKnttStudyMode(gKey);
+          });
+          selectorBar.querySelector('#dock-open-rdocs')?.addEventListener('click', () => {
+            if (typeof openKnttStudyMode === 'function') openKnttStudyMode(gKey, true);
+          });
+        } else {
+          selectorBar.style.display = 'none';
+        }
       }
 
       if (gKey === '10A' || gKey === '10') {
@@ -20201,12 +20343,25 @@
           teacherNPC3D.userData.rightArmPivot.rotation.x = 0.85 + Math.sin(elapsed * 3.5) * 0.35;
           updateFloatingLabel(teacherNPC3D, teacherNPC3D.position);
         }
+        let mobileBestSeatId = null;
+        if (typeof isMobileUI !== 'undefined' && isMobileUI) {
+          let bestDist = 2.6;
+          for (let i = 0; i < vacantSeats3D.length; i++) {
+            const ds = Math.hypot(myPlayer.pos.x - vacantSeats3D[i].worldPos.x, myPlayer.pos.z - vacantSeats3D[i].worldPos.z);
+            if (ds < bestDist) { bestDist = ds; mobileBestSeatId = vacantSeats3D[i].id; }
+          }
+        }
         for (let i = 0; i < vacantSeats3D.length; i++) {
           const s = vacantSeats3D[i];
           if (!s.labelEl) continue;
           const distToSeat = Math.hypot(myPlayer.pos.x - s.worldPos.x, myPlayer.pos.z - s.worldPos.z);
           const isCurrentSeat = !!(activeSeat3D && activeSeat3D.id === s.id);
-          if (!s.alwaysShowLabel && distToSeat > 4.2 && !isCurrentSeat) {
+          if (typeof isMobileUI !== 'undefined' && isMobileUI) {
+            if (!isCurrentSeat && s.id !== mobileBestSeatId) {
+              s.labelEl.style.display = 'none';
+              continue;
+            }
+          } else if (!s.alwaysShowLabel && distToSeat > 4.2 && !isCurrentSeat) {
             s.labelEl.style.display = 'none';
             continue;
           }
