@@ -108,6 +108,8 @@ function sanitizeAccountForClient(username, acc) {
     ownedAccessories: Array.isArray(acc.ownedAccessories) ? acc.ownedAccessories : [],
     equippedAccessories: Array.isArray(acc.equippedAccessories) ? acc.equippedAccessories : [],
     friends: Array.isArray(acc.friends) ? acc.friends : [],
+    collectedBooks: (acc.collectedBooks && typeof acc.collectedBooks === 'object') ? acc.collectedBooks : {},
+    roomDocs: (acc.roomDocs && typeof acc.roomDocs === 'object') ? acc.roomDocs : {},
     profile: acc.profile || { name: username, className: '10A' }
   };
 }
@@ -198,6 +200,8 @@ const server = http.createServer(async (req, res) => {
         ownedAccessories: [],
         equippedAccessories: [],
         friends: [],
+        collectedBooks: {},
+        roomDocs: {},
         profile: {
           name,
           className,
@@ -261,6 +265,8 @@ const server = http.createServer(async (req, res) => {
       if (Array.isArray(body.ownedAccessories)) acc.ownedAccessories = body.ownedAccessories;
       if (Array.isArray(body.equippedAccessories)) acc.equippedAccessories = body.equippedAccessories;
       if (Array.isArray(body.friends)) acc.friends = body.friends;
+      if (body.collectedBooks && typeof body.collectedBooks === 'object') acc.collectedBooks = body.collectedBooks;
+      if (body.roomDocs && typeof body.roomDocs === 'object') acc.roomDocs = body.roomDocs;
       if (body.profile && typeof body.profile === 'object') {
         acc.profile = { ...(acc.profile || {}), ...body.profile };
       }
@@ -373,7 +379,7 @@ const server = http.createServer(async (req, res) => {
         ? room.events.filter(ev => ev.seq > sinceSeq && ev.senderId !== pid)
         : [];
 
-      const elapsedVirtualSec = ((now - room.env.createdAtMs) / 1000) * 20;
+      const elapsedVirtualSec = (now - room.env.createdAtMs) / 1000;
       return sendJSON(res, 200, {
         ok: true,
         players: others,

@@ -31,5 +31,44 @@
     },
     "createdAt": 1794757481776,
     "lastSaved": 1794757481783
+  },
+  "kntt_user_1794844087518": {
+    "salt": "15fd257fb09977c1567545a73eb97241",
+    "passwordHash": "24d7de0011f097951201ba88b837ec0348ca32a15dae450a473e0f5c541b12001c65a871ed83e4fc4562a6ec33b452c66f533f9c9fad8098edb0f4bcf1d88e49",
+    "coins": 20,
+    "dynamicScore": 0,
+    "discipline": 100,
+    "energy": 100,
+    "ownedVehicles": [
+      "walk"
+    ],
+    "activeVehicleId": "walk",
+    "ownedAccessories": [],
+    "equippedAccessories": [],
+    "friends": [],
+    "collectedBooks": {
+      "b_l1": 1,
+      "b_c1": 2
+    },
+    "roomDocs": {
+      "10A": [
+        {
+          "id": "d1",
+          "name": "DeCuongToan10.txt",
+          "content": "Menh de va tap hop"
+        }
+      ]
+    },
+    "profile": {
+      "name": "Hoc Sinh KNTT",
+      "className": "10A",
+      "gender": "male",
+      "hairStyle": "short",
+      "hairColor": "black",
+      "outfit": "classic",
+      "glasses": true
+    },
+    "createdAt": 1794844087565,
+    "lastSaved": 1794844087572
   }
 }
